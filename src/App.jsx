@@ -33,6 +33,7 @@ const NAV_ITEMS = [
 ]
 
 const AURORA_STOPS = ['#edf4ff', '#c9dcff', '#7fa7ff', '#356fe5']
+const CANARY_PROVINCES = new Set(['las palmas', 'santa cruz de tenerife'])
 
 const MAP_METRICS = {
   accidents: {
@@ -170,6 +171,17 @@ function auroraScale(value, min, max) {
 
   const normalized = (value - min) / (max - min)
   return interpolateColor(AURORA_STOPS, normalized)
+}
+
+function createFeatureCollection(features) {
+  return { type: 'FeatureCollection', features }
+}
+
+function isCanaryProvince(feature) {
+  const dashboardKey = feature.properties.dashboardKey?.toLowerCase()
+  const dashboardName = feature.properties.dashboardName?.toLowerCase()
+
+  return CANARY_PROVINCES.has(dashboardKey) || CANARY_PROVINCES.has(dashboardName)
 }
 
 function buildLinePath(points) {
@@ -433,11 +445,11 @@ function App() {
         <section id="overview" className="accidentes-hero nz-card nz-card--glass">
           <div className="nz-hero__inner accidentes-hero__inner">
             <div className="nz-stack accidentes-hero__copy">
-              <span className="nz-hero__eyebrow">Lectura clara del Excel ministerial</span>
-              <h2 className="nz-hero__title">Una vista directa de los accidentes con victimas, sin ruido visual.</h2>
+              <span className="nz-hero__eyebrow">Datos oficiales 2024</span>
+              <h2 className="nz-hero__title">Una lectura directa de los accidentes con victimas en Espana.</h2>
               <p className="nz-hero__sub">
-                Este panel reorganiza el dataset 2024 para responder rapido a lo importante: donde
-                se concentran los accidentes, cuando suben y a que perfiles afectan mas.
+                El panel reorganiza el Excel ministerial para responder rapido a tres preguntas:
+                donde se concentran los accidentes, cuando suben y a quienes afectan mas.
               </p>
               <div className="accidentes-hero__meta">
                 <span><strong>Fuente:</strong> Excel ministerial de accidentes con victimas 2024</span>
@@ -526,7 +538,7 @@ function App() {
           <SectionHeading
             eyebrow="Capa territorial"
             title="Mapa interactivo por provincia"
-            description="No hay coordenadas de cada accidente, pero si una lectura provincial potente, clicable y sincronizada con rankings y tipologias de via."
+            description="No hay coordenadas por siniestro: la lectura correcta es provincial, con Canarias en escala ampliada para que se vea mejor."
             actions={
               <ToggleGroup
                 options={Object.entries(MAP_METRICS).map(([value, config]) => ({
@@ -640,7 +652,7 @@ function App() {
           <SectionHeading
             eyebrow="Capa temporal"
             title="Cuando se concentran los accidentes"
-            description="Se combinan curvas mensuales, barras semanales y una matriz horaria para seguir el pulso del ano."
+            description="Curva mensual, reparto semanal y matriz compacta para detectar cuando sube mas la siniestralidad."
             actions={
               <ToggleGroup
                 options={Object.entries(TREND_METRICS).map(([value, config]) => ({
@@ -665,7 +677,7 @@ function App() {
                   <h3 className="nz-card__title">Dias con mayor carga</h3>
                 </div>
               </div>
-               <WeekdayBars rows={weekdayRows} metricKey={trendMetric} />
+              <WeekdayBars rows={weekdayRows} metricKey={trendMetric} />
             </section>
           </div>
 
@@ -673,8 +685,8 @@ function App() {
             <section className="nz-card nz-card--glass-brand accidentes-heatmap-card">
               <SectionHeading
                 eyebrow="Matriz horaria"
-                title="Dia y hora"
-                description="Vista compacta para detectar rapidamente franjas de mayor intensidad."
+                title="Franja por dia y hora"
+                description="Lectura comprimida para localizar rapido las horas con mayor carga."
                 actions={
                   <ToggleGroup
                     options={[
@@ -1102,8 +1114,58 @@ function ProvinceMap({ geojson, selectedProvinceSlug, onSelect, metricKey }) {
   const min = Math.min(...values)
   const max = Math.max(...values)
   const steps = Array.from({ length: 5 }, (_, index) => min + ((max - min) / 4) * index)
-  const projection = geoMercator().fitSize([width, height], geojson)
-  const pathGenerator = geoPath(projection)
+  const mainlandFeatures = geojson.features.filter((feature) => !isCanaryProvince(feature))
+  const canaryFeatures = geojson.features.filter((feature) => isCanaryProvince(feature))
+  const mainlandProjection = geoMercator().fitExtent(
+    [
+      [18, 22],
+      [width - 18, height - 22],
+    ],
+    createFeatureCollection(mainlandFeatures),
+  )
+  const mainlandPath = geoPath(mainlandProjection)
+  const canaryInset = { x: width - 234, y: height - 164, width: 208, height: 120 }
+  const canaryProjection =
+    canaryFeatures.length > 0
+      ? geoMercator().fitExtent(
+          [
+            [canaryInset.x + 14, canaryInset.y + 32],
+            [canaryInset.x + canaryInset.width - 14, canaryInset.y + canaryInset.height - 16],
+          ],
+          createFeatureCollection(canaryFeatures),
+        )
+      : null
+  const canaryPath = canaryProjection ? geoPath(canaryProjection) : null
+
+  function renderProvince(feature, pathGenerator, keyPrefix = '') {
+    const provinceKey = feature.properties.dashboardKey
+    const value = metric.getValueFromFeature(feature.properties)
+    const isSelected = provinceKey === selectedProvinceSlug
+    const fill = isSelected ? 'url(#accidentes-selected-fill)' : auroraScale(value, min, max)
+
+    return (
+      <path
+        key={`${keyPrefix}${provinceKey}`}
+        d={pathGenerator(feature) ?? ''}
+        className={`accidentes-map__shape${isSelected ? ' is-selected' : ''}`}
+        fill={fill}
+        tabIndex={0}
+        role="button"
+        aria-pressed={isSelected}
+        onClick={() => onSelect(provinceKey)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            onSelect(provinceKey)
+          }
+        }}
+      >
+        <title>
+          {feature.properties.dashboardName}: {metric.format(value)}
+        </title>
+      </path>
+    )
+  }
 
   return (
     <div className="nz-map nz-map--hero nz-map--glass accidentes-map accidentes-map__container">
@@ -1126,35 +1188,27 @@ function ProvinceMap({ geojson, selectedProvinceSlug, onSelect, metricKey }) {
           </linearGradient>
         </defs>
 
-        {geojson.features.map((feature) => {
-          const provinceKey = feature.properties.dashboardKey
-          const value = metric.getValueFromFeature(feature.properties)
-          const isSelected = provinceKey === selectedProvinceSlug
-          const fill = isSelected ? 'url(#accidentes-selected-fill)' : auroraScale(value, min, max)
+        {mainlandFeatures.map((feature) => renderProvince(feature, mainlandPath))}
 
-          return (
-            <path
-              key={provinceKey}
-              d={pathGenerator(feature) ?? ''}
-              className={`accidentes-map__shape${isSelected ? ' is-selected' : ''}`}
-              fill={fill}
-              tabIndex={0}
-              role="button"
-              aria-pressed={isSelected}
-              onClick={() => onSelect(provinceKey)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault()
-                  onSelect(provinceKey)
-                }
-              }}
-            >
-              <title>
-                {feature.properties.dashboardName}: {metric.format(value)}
-              </title>
-            </path>
-          )
-        })}
+        {canaryPath && (
+          <g className="accidentes-map__inset">
+            <rect
+              x={canaryInset.x}
+              y={canaryInset.y}
+              width={canaryInset.width}
+              height={canaryInset.height}
+              rx="18"
+              className="accidentes-map__inset-frame"
+            />
+            <text x={canaryInset.x + 14} y={canaryInset.y + 20} className="accidentes-map__inset-label">
+              Canarias
+            </text>
+            <text x={canaryInset.x + 14} y={canaryInset.y + 35} className="accidentes-map__inset-note">
+              Escala ampliada
+            </text>
+            {canaryFeatures.map((feature) => renderProvince(feature, canaryPath, 'canary-'))}
+          </g>
+        )}
       </svg>
 
       <div className="nz-map__legend accidentes-map__legend">

@@ -352,6 +352,27 @@ body {
   background: linear-gradient(180deg, color-mix(in srgb, var(--nz-surface-base) 98%, white), color-mix(in srgb, var(--nz-surface-page) 94%, white));
 }
 
+.accidentes-map__inset-frame {
+  fill: color-mix(in srgb, var(--nz-surface-raised) 97%, white);
+  stroke: color-mix(in srgb, var(--nz-color-brand) 16%, var(--nz-border-soft));
+  stroke-width: 1.2;
+}
+
+.accidentes-map__inset-label,
+.accidentes-map__inset-note {
+  fill: var(--nz-text-muted);
+}
+
+.accidentes-map__inset-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  fill: var(--nz-text-strong);
+}
+
+.accidentes-map__inset-note {
+  font-size: 0.7rem;
+}
+
 .accidentes-map__shape {
   stroke: color-mix(in srgb, var(--nz-surface-page) 78%, transparent);
   stroke-width: 1.15;
@@ -597,35 +618,35 @@ body {
 
 .accidentes-heatmap {
   display: grid;
-  gap: 0.28rem;
+  gap: 0.18rem;
 }
 
 .accidentes-heatmap__header,
 .accidentes-heatmap__row {
   display: grid;
-  grid-template-columns: 3.6rem repeat(7, minmax(0, 1fr));
-  gap: 0.18rem;
+  grid-template-columns: 2.65rem repeat(7, minmax(1.15rem, 1fr));
+  gap: 0.12rem;
   align-items: center;
 }
 
 .accidentes-heatmap__header strong {
   text-align: center;
-  font-size: var(--nz-text-xs);
+  font-size: 0.64rem;
   letter-spacing: 0.08em;
   color: var(--nz-text-muted);
   text-transform: uppercase;
 }
 
 .accidentes-heatmap__label {
-  font-size: var(--nz-text-xs);
+  font-size: 0.66rem;
   color: var(--nz-text-muted);
 }
 
 .accidentes-heatmap__cell {
   display: block;
   width: 100%;
-  aspect-ratio: 1;
-  border-radius: 0.32rem;
+  height: 0.72rem;
+  border-radius: 0.22rem;
   border: 1px solid rgba(37, 99, 235, 0.08);
 }
 
@@ -899,7 +920,7 @@ body {
 
   .accidentes-heatmap__header,
   .accidentes-heatmap__row {
-    min-width: 24rem;
+    min-width: 18.5rem;
   }
 
   .accidentes-header {
@@ -949,6 +970,6 @@ body {
 
   .accidentes-heatmap__header,
   .accidentes-heatmap__row {
-    min-width: 22rem;
+    min-width: 17rem;
   }
 }
