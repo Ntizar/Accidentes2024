@@ -1,0 +1,945 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.accidentes-shell {
+  --nz-shell-sidebar: 308px;
+}
+
+.accidentes-main {
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.accidentes-sidebar {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
+.accidentes-sidebar::after {
+  content: '';
+  position: absolute;
+  inset: auto -5rem -8rem auto;
+  width: 16rem;
+  height: 16rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--nz-color-accent) 28%, transparent), transparent 65%);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.accidentes-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.accidentes-brand__mark {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 1rem;
+  background: var(--nz-gradient-aurora);
+  color: var(--nz-text-on-brand);
+  font-weight: 800;
+  box-shadow: var(--nz-shadow-aurora);
+}
+
+.accidentes-brand__copy {
+  margin: 0.35rem 0 0;
+  max-width: 24ch;
+}
+
+.accidentes-sidebar__meta {
+  position: relative;
+  z-index: 1;
+}
+
+.accidentes-sidebar__nav {
+  position: relative;
+  z-index: 1;
+}
+
+.accidentes-sidebar__note {
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.accidentes-header {
+  padding-block: 1rem;
+}
+
+.accidentes-header__sub {
+  margin: 0.35rem 0 0;
+}
+
+.accidentes-header__actions {
+  justify-content: flex-end;
+}
+
+.accidentes-section {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.accidentes-section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.accidentes-section-heading__title {
+  margin-top: 0.75rem;
+}
+
+.accidentes-section-heading__description {
+  margin: 0.6rem 0 0;
+  max-width: 68ch;
+}
+
+.accidentes-section-heading__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.accidentes-toggle-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  border: 1px solid var(--nz-border-soft);
+  border-radius: var(--nz-radius-pill);
+  background: var(--nz-surface-glass);
+  box-shadow: var(--nz-shadow-sm);
+}
+
+.accidentes-toggle-group__item {
+  border: 0;
+  border-radius: var(--nz-radius-pill);
+  background: transparent;
+  color: var(--nz-text-muted);
+  font: inherit;
+  font-size: var(--nz-text-sm);
+  font-weight: 700;
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+  transition:
+    background var(--nz-duration-base) var(--nz-ease-standard),
+    color var(--nz-duration-base) var(--nz-ease-standard),
+    box-shadow var(--nz-duration-base) var(--nz-ease-standard);
+}
+
+.accidentes-toggle-group__item:hover {
+  color: var(--nz-text-strong);
+  background: var(--nz-surface-soft);
+}
+
+.accidentes-toggle-group__item.is-active {
+  background: var(--nz-gradient-aurora);
+  color: var(--nz-text-on-brand);
+  box-shadow: var(--nz-shadow-aurora);
+}
+
+.accidentes-hero {
+  border-radius: calc(var(--nz-radius-xl) * 1.15);
+  padding: clamp(2rem, 4vw, 3rem);
+  border: 1px solid var(--nz-border-default);
+  box-shadow: var(--nz-shadow-lg);
+}
+
+.accidentes-hero__inner {
+  max-width: none;
+  padding: 0;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.accidentes-hero__copy {
+  max-width: 42rem;
+}
+
+.accidentes-hero__visual {
+  min-height: 30rem;
+}
+
+.accidentes-hero__visual-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.72fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.accidentes-hero__orb-zone {
+  position: relative;
+  min-height: 18rem;
+  border-radius: calc(var(--nz-radius-xl) * 0.9);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--nz-color-brand) 35%, transparent), transparent 36%),
+    radial-gradient(circle at 80% 28%, color-mix(in srgb, var(--nz-color-accent) 35%, transparent), transparent 38%),
+    linear-gradient(145deg, color-mix(in srgb, var(--nz-surface-glass-strong) 92%, transparent), color-mix(in srgb, var(--nz-surface-base) 88%, transparent));
+  border: 1px solid var(--nz-border-default);
+}
+
+.accidentes-hero__ring {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.62;
+}
+
+.accidentes-hero__orb {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -52%);
+  box-shadow:
+    inset -10px -18px 38px rgba(0, 0, 0, 0.28),
+    inset 12px 10px 28px rgba(255, 255, 255, 0.12),
+    0 36px 68px rgba(15, 23, 42, 0.45);
+}
+
+.accidentes-hero__stat {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px solid var(--nz-border-default);
+  border-radius: var(--nz-radius-lg);
+  background: var(--nz-surface-glass-strong);
+  box-shadow: var(--nz-shadow-md);
+}
+
+.accidentes-hero__stat strong {
+  font-size: clamp(1.35rem, 2vw, 1.7rem);
+}
+
+.accidentes-hero__mini-panel {
+  justify-content: space-between;
+}
+
+.accidentes-mini-kpi {
+  display: grid;
+  gap: 0.3rem;
+  padding: 1rem;
+  border-radius: var(--nz-radius-lg);
+  background: color-mix(in srgb, var(--nz-surface-glass-strong) 88%, transparent);
+  border: 1px solid var(--nz-border-soft);
+}
+
+.accidentes-mini-kpi span,
+.accidentes-mini-label {
+  font-size: var(--nz-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--nz-text-muted);
+  font-weight: 700;
+}
+
+.accidentes-mini-kpi strong {
+  font-size: 1.4rem;
+}
+
+.accidentes-mini-kpi small {
+  color: var(--nz-text-muted);
+}
+
+.accidentes-kpis {
+  margin-top: -0.25rem;
+}
+
+.accidentes-overview-grid,
+.accidentes-trends-grid,
+.accidentes-victims-grid,
+.accidentes-risk-grid {
+  align-items: start;
+}
+
+.accidentes-summary-card__list,
+.accidentes-ranking-list,
+.accidentes-mode-grid,
+.accidentes-horizontal-list,
+.accidentes-road-card__list,
+.accidentes-age-chart__rows,
+.accidentes-community-board,
+.accidentes-score-row,
+.accidentes-metric-split,
+.accidentes-insight-grid,
+.accidentes-insight-panel__grid,
+.accidentes-role-legend,
+.accidentes-table-list,
+.accidentes-road-grid,
+.accidentes-split-bars,
+.accidentes-role-track,
+.accidentes-weekday-bars,
+.accidentes-map-side,
+.accidentes-table-layout,
+.accidentes-table-loading,
+.accidentes-mode-card__stats,
+.accidentes-province-card__stats {
+  display: grid;
+  gap: 1rem;
+}
+
+.accidentes-insight-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.accidentes-score-row {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.accidentes-score-row__rank {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--nz-surface-brand-soft);
+  color: var(--nz-status-info-text);
+  font-size: var(--nz-text-sm);
+  font-weight: 700;
+}
+
+.accidentes-score-row__body {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.accidentes-score-row__label {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.accidentes-score-row__label span,
+.accidentes-score-row__meta {
+  color: var(--nz-text-muted);
+  font-size: var(--nz-text-sm);
+}
+
+.accidentes-map-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.22fr) minmax(22rem, 0.78fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.accidentes-map-card {
+  min-height: 100%;
+}
+
+.accidentes-map__container {
+  height: clamp(28rem, 70vh, 44rem);
+}
+
+.accidentes-map__svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--nz-color-brand) 8%, transparent), transparent 56%),
+    linear-gradient(180deg, color-mix(in srgb, var(--nz-surface-base) 92%, transparent), color-mix(in srgb, var(--nz-surface-page) 88%, transparent));
+}
+
+.accidentes-map__shape {
+  stroke: color-mix(in srgb, var(--nz-surface-page) 78%, transparent);
+  stroke-width: 1.15;
+  cursor: pointer;
+  transition:
+    transform var(--nz-duration-fast) var(--nz-ease-standard),
+    opacity var(--nz-duration-fast) var(--nz-ease-standard),
+    filter var(--nz-duration-fast) var(--nz-ease-standard),
+    stroke var(--nz-duration-fast) var(--nz-ease-standard),
+    stroke-width var(--nz-duration-fast) var(--nz-ease-standard);
+  transform-origin: center;
+}
+
+.accidentes-map__shape:hover,
+.accidentes-map__shape:focus-visible {
+  opacity: 0.94;
+  filter: brightness(1.08);
+  stroke: rgba(255, 255, 255, 0.92);
+}
+
+.accidentes-map__shape.is-selected {
+  stroke: rgba(255, 255, 255, 0.96);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 16px rgba(34, 211, 238, 0.35));
+}
+
+.accidentes-map__overlay {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.accidentes-map__overlay p {
+  margin: 0;
+  max-width: 28ch;
+}
+
+.accidentes-map__overlay--compact p {
+  max-width: 18ch;
+}
+
+.accidentes-map__legend {
+  width: min(18rem, calc(100% - 2rem));
+}
+
+.accidentes-map__legend strong {
+  font-size: var(--nz-text-sm);
+}
+
+.accidentes-map__legend-scale {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.accidentes-map__legend-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.accidentes-map__legend-swatch {
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.accidentes-province-card__header {
+  align-items: center;
+}
+
+.accidentes-share-donut {
+  --size: 7.5rem;
+  --thickness: 1rem;
+}
+
+.accidentes-province-card__stats,
+.accidentes-insight-panel__grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.accidentes-road-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.accidentes-road-card__title {
+  font-size: var(--nz-text-md);
+}
+
+.accidentes-road-card__row {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.accidentes-road-card__head,
+.accidentes-metric-split__head,
+.accidentes-horizontal-list__head,
+.accidentes-table-content__head,
+.accidentes-age-chart__labels,
+.accidentes-role-legend,
+.accidentes-mode-card__stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.accidentes-ranking-item,
+.accidentes-table-list__item {
+  width: 100%;
+  border: 1px solid var(--nz-border-soft);
+  border-radius: var(--nz-radius-lg);
+  background: var(--nz-surface-base);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--nz-duration-base) var(--nz-ease-standard),
+    background var(--nz-duration-base) var(--nz-ease-standard),
+    transform var(--nz-duration-fast) var(--nz-ease-standard),
+    box-shadow var(--nz-duration-base) var(--nz-ease-standard);
+}
+
+.accidentes-ranking-item:hover,
+.accidentes-table-list__item:hover {
+  transform: translateY(-1px);
+  border-color: var(--nz-border-default);
+  box-shadow: var(--nz-shadow-sm);
+}
+
+.accidentes-ranking-item.is-active,
+.accidentes-table-list__item.is-active {
+  border-color: var(--nz-border-brand);
+  background: color-mix(in srgb, var(--nz-surface-brand-soft) 78%, transparent);
+  box-shadow: var(--nz-shadow-brand);
+}
+
+.accidentes-ranking-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.85rem 1rem;
+}
+
+.accidentes-ranking-item__rank {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nz-color-brand) 16%, transparent);
+  color: var(--nz-text-strong);
+  font-weight: 800;
+}
+
+.accidentes-ranking-item__name {
+  font-weight: 700;
+}
+
+.accidentes-ranking-item__value {
+  color: var(--nz-text-muted);
+  font-size: var(--nz-text-sm);
+}
+
+.accidentes-chart {
+  display: grid;
+  gap: 1rem;
+  height: 100%;
+}
+
+.accidentes-chart__svg {
+  width: 100%;
+  height: 100%;
+}
+
+.accidentes-chart__grid {
+  stroke: color-mix(in srgb, var(--nz-text-muted) 18%, transparent);
+  stroke-width: 1;
+}
+
+.accidentes-chart__axis-text {
+  fill: var(--nz-text-muted);
+  font-size: 0.75rem;
+}
+
+.accidentes-chart__axis-text--center {
+  text-anchor: middle;
+}
+
+.accidentes-chart__area {
+  fill: color-mix(in srgb, var(--nz-chart-1) 16%, transparent);
+}
+
+.accidentes-chart__line {
+  fill: none;
+  stroke: var(--nz-chart-1);
+  stroke-width: 3.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.accidentes-chart__line--accent {
+  stroke: var(--nz-chart-2);
+}
+
+.accidentes-chart__dot {
+  fill: var(--nz-chart-1);
+  stroke: var(--nz-surface-page);
+  stroke-width: 2;
+}
+
+.accidentes-chart__dot--accent {
+  fill: var(--nz-chart-2);
+}
+
+.accidentes-weekday-bars {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  gap: 0.85rem;
+  min-height: 20rem;
+}
+
+.accidentes-weekday-bars__item {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: center;
+}
+
+.accidentes-weekday-bars__bar-wrap {
+  width: 100%;
+  height: 15rem;
+  border-radius: var(--nz-radius-lg);
+  border: 1px solid var(--nz-border-soft);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--nz-surface-soft) 70%, transparent), transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 0.45rem;
+}
+
+.accidentes-weekday-bars__bar {
+  width: 100%;
+  border-radius: calc(var(--nz-radius-lg) - 0.35rem);
+  background: var(--nz-gradient-aurora);
+  box-shadow: var(--nz-shadow-aurora);
+}
+
+.accidentes-weekday-bars__item strong {
+  font-size: var(--nz-text-sm);
+}
+
+.accidentes-weekday-bars__item span {
+  color: var(--nz-text-muted);
+  font-size: var(--nz-text-xs);
+  text-align: center;
+}
+
+.accidentes-heatmap {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.accidentes-heatmap__header,
+.accidentes-heatmap__row {
+  display: grid;
+  grid-template-columns: 4.5rem repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.accidentes-heatmap__header strong {
+  text-align: center;
+  font-size: var(--nz-text-xs);
+  letter-spacing: 0.08em;
+  color: var(--nz-text-muted);
+  text-transform: uppercase;
+}
+
+.accidentes-heatmap__label {
+  font-size: var(--nz-text-xs);
+  color: var(--nz-text-muted);
+}
+
+.accidentes-heatmap__cell {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.accidentes-mode-grid,
+.accidentes-community-board {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.accidentes-mode-card__title,
+.accidentes-community-card__title {
+  font-size: var(--nz-text-md);
+}
+
+.accidentes-mode-card__stats div,
+.accidentes-hero__stat,
+.accidentes-community-card__meters {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.accidentes-mode-card__stats span,
+.accidentes-metric-split small,
+.accidentes-horizontal-list small,
+.accidentes-age-chart__labels span,
+.accidentes-table-list__item span,
+.accidentes-mode-card__stats span {
+  color: var(--nz-text-muted);
+  font-size: var(--nz-text-sm);
+}
+
+.accidentes-role-track {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.accidentes-role-track__segment,
+.accidentes-age-chart__segment,
+.accidentes-horizontal-list__bar {
+  display: block;
+  height: 0.75rem;
+  border-radius: 999px;
+}
+
+.accidentes-role-track__segment--brand,
+.accidentes-age-chart__segment--male,
+.accidentes-horizontal-list__bar {
+  background: linear-gradient(135deg, var(--nz-chart-1), color-mix(in srgb, var(--nz-chart-1) 46%, white));
+}
+
+.accidentes-role-track__segment--accent,
+.accidentes-age-chart__segment--female,
+.accidentes-horizontal-list__bar.is-accent {
+  background: linear-gradient(135deg, var(--nz-chart-2), color-mix(in srgb, var(--nz-chart-2) 46%, white));
+}
+
+.accidentes-role-track__segment--violet,
+.accidentes-age-chart__segment--unknown {
+  background: linear-gradient(135deg, var(--nz-chart-3), color-mix(in srgb, var(--nz-chart-3) 46%, white));
+}
+
+.accidentes-age-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  color: var(--nz-text-muted);
+  font-size: var(--nz-text-sm);
+}
+
+.accidentes-age-chart__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.accidentes-age-chart__swatch {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 999px;
+}
+
+.accidentes-age-chart__rows {
+  max-height: 38rem;
+  overflow: auto;
+  padding-right: 0.25rem;
+}
+
+.accidentes-age-chart__row {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.accidentes-age-chart__track,
+.accidentes-horizontal-list__track {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.accidentes-age-chart__segment,
+.accidentes-horizontal-list__bar {
+  min-width: 0.35rem;
+}
+
+.accidentes-horizontal-list__row {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.accidentes-horizontal-list__track {
+  height: 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nz-surface-soft) 78%, transparent);
+  overflow: hidden;
+}
+
+.accidentes-community-card {
+  min-height: 100%;
+}
+
+.accidentes-table-card {
+  padding: 1rem;
+}
+
+.accidentes-table-layout {
+  grid-template-columns: minmax(15rem, 18rem) minmax(0, 1fr);
+  align-items: start;
+}
+
+.accidentes-table-sidebar {
+  display: grid;
+  gap: 1rem;
+  padding-right: 0.75rem;
+}
+
+.accidentes-table-list {
+  max-height: 44rem;
+  overflow: auto;
+  padding-right: 0.25rem;
+}
+
+.accidentes-table-list__item {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.85rem 0.95rem;
+}
+
+.accidentes-table-content {
+  min-width: 0;
+}
+
+.accidentes-table-content__title {
+  margin-top: 0.75rem;
+}
+
+.accidentes-table-wrap {
+  max-height: 48rem;
+}
+
+.accidentes-table {
+  min-width: 72rem;
+}
+
+.accidentes-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.accidentes-table tbody td {
+  font-size: var(--nz-text-sm);
+  min-width: 7rem;
+}
+
+.accidentes-empty-state,
+.accidentes-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--nz-color-brand) 22%, transparent), transparent 34%),
+    radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--nz-color-accent) 22%, transparent), transparent 34%),
+    linear-gradient(160deg, var(--nz-surface-page), color-mix(in srgb, var(--nz-surface-page) 80%, #020617));
+}
+
+.accidentes-loading__card {
+  width: min(100%, 42rem);
+}
+
+.accidentes-loading__skeletons {
+  margin-top: 1rem;
+}
+
+@media (max-width: 1180px) {
+  .accidentes-map-grid,
+  .accidentes-hero__visual-grid,
+  .accidentes-table-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .accidentes-map__container {
+    height: clamp(24rem, 62vh, 38rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .accidentes-main {
+    padding-inline: 1rem;
+  }
+
+  .accidentes-hero {
+    padding: 1.25rem;
+  }
+
+  .accidentes-overview-grid,
+  .accidentes-trends-grid,
+  .accidentes-victims-grid,
+  .accidentes-risk-grid,
+  .accidentes-road-grid,
+  .accidentes-mode-grid,
+  .accidentes-community-board,
+  .accidentes-insight-grid,
+  .accidentes-province-card__stats,
+  .accidentes-insight-panel__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .accidentes-map-grid {
+    gap: 1rem;
+  }
+
+  .accidentes-section-heading {
+    align-items: stretch;
+  }
+
+  .accidentes-weekday-bars {
+    grid-template-columns: repeat(7, minmax(2.6rem, 1fr));
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .accidentes-heatmap {
+    overflow-x: auto;
+  }
+
+  .accidentes-heatmap__header,
+  .accidentes-heatmap__row {
+    min-width: 34rem;
+  }
+
+  .accidentes-header {
+    padding-inline: 1rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .accidentes-header__actions,
+  .accidentes-section-heading__actions,
+  .accidentes-toggle-group,
+  .accidentes-score-row__label,
+  .accidentes-road-card__head,
+  .accidentes-table-content__head,
+  .accidentes-age-chart__labels,
+  .accidentes-role-legend,
+  .accidentes-mode-card__stats {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .accidentes-map__overlay--top-right {
+    display: none;
+  }
+
+  .accidentes-map__legend {
+    left: 0.75rem;
+    right: 0.75rem;
+    width: auto;
+  }
+
+  .accidentes-score-row,
+  .accidentes-ranking-item {
+    grid-template-columns: auto 1fr;
+  }
+
+  .accidentes-score-row__meta,
+  .accidentes-ranking-item__value {
+    grid-column: 2;
+  }
+
+  .accidentes-heatmap__header,
+  .accidentes-heatmap__row {
+    min-width: 30rem;
+  }
+}
