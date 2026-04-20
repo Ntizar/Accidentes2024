@@ -32,7 +32,7 @@ const NAV_ITEMS = [
   { href: '#tablas', label: 'Tablas' },
 ]
 
-const AURORA_STOPS = ['#22d3ee', '#3b82f6', '#8b5cf6', '#f97316']
+const AURORA_STOPS = ['#edf4ff', '#c9dcff', '#7fa7ff', '#356fe5']
 
 const MAP_METRICS = {
   accidents: {
@@ -209,7 +209,7 @@ function App() {
   const [victimMode, setVictimMode] = useState('urban')
   const [heatmapMode, setHeatmapMode] = useState('urban')
   const [selectedProvinceSlug, setSelectedProvinceSlug] = useState(null)
-  const [theme, setTheme] = useState(() => document.body.dataset.nzTheme || 'dark')
+  const [theme, setTheme] = useState(() => document.body.dataset.nzTheme || 'light')
   const [tableSearch, setTableSearch] = useState('')
   const [selectedTableId, setSelectedTableId] = useState(null)
   const [activeHash, setActiveHash] = useState(() => window.location.hash || '#overview')
@@ -297,7 +297,6 @@ function App() {
   }
 
   const provinces = dashboard.overview.provinces
-  const communities = dashboard.overview.communities
   const selectedProvince =
     provinces.find((province) => province.slug === selectedProvinceSlug) ?? provinces[0]
 
@@ -328,7 +327,9 @@ function App() {
     selectedProvince.total.accidents,
   )
 
-  const sparklineData = dashboard.trends.months.map((month) => month.total.accidents)
+  const topProvinces = dashboard.overview.topProvincesByAccidents.slice(0, 5)
+  const leadProvince = topProvinces[0]
+  const weekdayRows = dashboard.trends.weekdays.slice(0, 7)
   const topVictimClasses = [...dashboard.victims.userClasses[victimMode]]
     .sort((left, right) => right.total.victims - left.total.victims)
     .slice(0, 6)
@@ -365,14 +366,13 @@ function App() {
 
   return (
     <div className="nz-app-shell accidentes-shell">
-      <aside className="nz-app-shell__sidebar accidentes-sidebar nz-grid-bg nz-grid-bg--mask nz-noise">
+      <aside className="nz-app-shell__sidebar accidentes-sidebar">
         <div className="accidentes-brand">
           <div className="accidentes-brand__mark">A24</div>
           <div>
             <strong>Accidentes 2024</strong>
-            <p className="nz-text-muted accidentes-brand__copy">
-              Excel ministerial, reordenado como megadashboard Ntizar Aurora.
-            </p>
+            <p className="nz-text-muted accidentes-brand__copy">Fuente: Excel ministerial de accidentes con victimas 2024.</p>
+            <p className="nz-text-muted accidentes-brand__copy">Visualizacion: David Antizar.</p>
           </div>
         </div>
 
@@ -406,9 +406,9 @@ function App() {
 
       <header className="nz-app-shell__header accidentes-header">
         <div>
-          <h1 className="nz-text-h4">Megadashboard visual de accidentes con victimas en Espana</h1>
+          <h1 className="nz-text-h4">Accidentes con victimas en Espana · 2024</h1>
           <p className="nz-text-muted accidentes-header__sub">
-            {dashboard.meta.sourceFile} · {new Date(dashboard.meta.generatedAt).toLocaleString('es-ES')}
+            Fuente: Excel ministerial de accidentes con victimas 2024 · Visualizacion: David Antizar
           </p>
         </div>
 
@@ -430,74 +430,63 @@ function App() {
       </header>
 
       <main className="nz-app-shell__main accidentes-main">
-        <section id="overview" className="nz-hero nz-hero--split accidentes-hero nz-aurora-bg nz-noise">
+        <section id="overview" className="accidentes-hero nz-card nz-card--glass">
           <div className="nz-hero__inner accidentes-hero__inner">
             <div className="nz-stack accidentes-hero__copy">
-              <span className="nz-hero__eyebrow">Ntizar Aurora · Datos ministeriales 2024</span>
-              <h2 className="nz-hero__title">
-                Todo el Excel de accidentes convertido en un <span className="nz-accent">panel vivo</span>
-                , territorial y legible.
-              </h2>
+              <span className="nz-hero__eyebrow">Lectura clara del Excel ministerial</span>
+              <h2 className="nz-hero__title">Una vista directa de los accidentes con victimas, sin ruido visual.</h2>
               <p className="nz-hero__sub">
-                Se reorganizan 101.996 accidentes con victimas, 1.785 fallecidos y 40 tablas
-                estadisticas en una experiencia visual que combina mapa provincial, ritmo temporal,
-                perfiles de victimas y exploracion completa del dataset.
+                Este panel reorganiza el dataset 2024 para responder rapido a lo importante: donde
+                se concentran los accidentes, cuando suben y a que perfiles afectan mas.
               </p>
+              <div className="accidentes-hero__meta">
+                <span><strong>Fuente:</strong> Excel ministerial de accidentes con victimas 2024</span>
+                <span><strong>Hecho por:</strong> David Antizar</span>
+              </div>
               <div className="nz-hero__cta">
                 <a className="nz-btn nz-btn--primary nz-btn--lg" href="#mapa">
                   Explorar el mapa
                 </a>
-                <a className="nz-btn nz-btn--glass nz-btn--lg" href="#tablas">
+                <a className="nz-btn nz-btn--secondary nz-btn--lg" href="#tablas">
                   Ir al explorador
                 </a>
               </div>
             </div>
 
-            <div className="accidentes-hero__visual nz-card nz-card--glass-brand nz-card--interactive">
-              <div className="nz-card__header">
-                <div>
-                  <span className="nz-badge nz-badge--glass-brand nz-badge--no-dot">
-                    Panorama nacional
-                  </span>
-                  <h3 className="nz-card__title">Pulso anual</h3>
-                </div>
-                <span className="nz-text-muted nz-text-sm">2024</span>
+            <div className="accidentes-hero__summary nz-card nz-card--glass-soft">
+              <div className="accidentes-hero__summary-grid">
+                <article className="accidentes-hero__summary-stat">
+                  <span>Accidentes</span>
+                  <strong>{formatNumber(dashboard.overview.national.total.accidents)}</strong>
+                </article>
+                <article className="accidentes-hero__summary-stat">
+                  <span>Fallecidos</span>
+                  <strong>{formatNumber(dashboard.overview.national.total.fatalities)}</strong>
+                </article>
+                <article className="accidentes-hero__summary-stat">
+                  <span>Mes pico</span>
+                  <strong>{dashboard.trends.peakMonth.month}</strong>
+                </article>
+                <article className="accidentes-hero__summary-stat">
+                  <span>Provincia con mas accidentes</span>
+                  <strong>{leadProvince?.name}</strong>
+                </article>
               </div>
 
-              <div className="accidentes-hero__visual-grid">
-                <div className="accidentes-hero__orb-zone">
-                  <div className="nz-glow-ring accidentes-hero__ring" aria-hidden="true"></div>
-                  <div className="nz-orb nz-orb--aurora nz-orb--lg accidentes-hero__orb" aria-hidden="true"></div>
-                  <div className="accidentes-hero__stat">
-                    <span className="nz-badge nz-badge--accent nz-badge--no-dot">
-                      Pico mensual
-                    </span>
-                    <strong>{dashboard.trends.peakMonth.month}</strong>
-                    <span className="nz-text-muted">
-                      {formatNumber(dashboard.trends.peakMonth.accidents)} accidentes
-                    </span>
-                  </div>
+              <div className="accidentes-hero__top">
+                <div className="accidentes-hero__top-head">
+                  <strong>Top provincias por accidentes</strong>
+                  <span>Total anual</span>
                 </div>
 
-                <div className="nz-stack nz-stack--sm accidentes-hero__mini-panel">
-                  <div className="accidentes-mini-kpi">
-                    <span>Dia mas intenso</span>
-                    <strong>{dashboard.trends.peakWeekday.weekday}</strong>
-                    <small>{formatNumber(dashboard.trends.peakWeekday.accidents)} accidentes</small>
-                  </div>
-
-                  <div>
-                    <div className="accidentes-mini-label">Cadencia mensual</div>
-                    <div className="nz-sparkline nz-sparkline--aurora nz-sparkline--lg">
-                      {sparklineData.map((value, index) => (
-                        <span
-                          key={`${value}-${index}`}
-                          className="nz-sparkline__bar"
-                          style={{ '--h': `${(value / Math.max(...sparklineData)) * 100}%` }}
-                        ></span>
-                      ))}
+                <div className="accidentes-hero__top-list">
+                  {topProvinces.map((province, index) => (
+                    <div key={province.slug} className="accidentes-hero__top-item">
+                      <span className="accidentes-hero__top-rank">{index + 1}</span>
+                      <span className="accidentes-hero__top-name">{province.name}</span>
+                      <strong>{formatCompact(province.total.accidents)}</strong>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -531,80 +520,6 @@ function App() {
             sub={`${formatNumber(dashboard.overview.national.total.nonHospitalized)} victimas leves`}
             delta={`${formatNumber(dashboard.overview.national.urban.nonHospitalized)} urbanas`}
           />
-        </div>
-
-        <div className="nz-grid nz-grid--2 accidentes-overview-grid">
-          <section className="nz-card nz-card--glass accidentes-summary-card">
-            <SectionHeading
-              eyebrow="Radar rapido"
-              title="Donde se concentra el volumen"
-              description="Las comunidades con mas carga de accidentes marcan la lectura territorial del ano."
-            />
-
-            <div className="accidentes-summary-card__list">
-              {dashboard.overview.topCommunitiesByAccidents.slice(0, 6).map((community, index) => {
-                const urbanDominance = percentage(community.urban.accidents, community.total.accidents)
-
-                return (
-                  <div key={community.slug} className="accidentes-score-row">
-                    <div className="accidentes-score-row__rank">{index + 1}</div>
-                    <div className="accidentes-score-row__body">
-                      <div className="accidentes-score-row__label">
-                        <strong>{community.name}</strong>
-                        <span>{formatCompact(community.total.accidents)} accidentes</span>
-                      </div>
-                      <div className="nz-progress nz-progress--aurora">
-                        <span
-                          className="nz-progress__bar"
-                          style={{ width: `${(community.total.accidents / dashboard.overview.topCommunitiesByAccidents[0].total.accidents) * 100}%` }}
-                        ></span>
-                      </div>
-                    </div>
-                    <span className="accidentes-score-row__meta">{formatPercent(urbanDominance, 1)} urbano</span>
-                  </div>
-                )
-              })}
-            </div>
-          </section>
-
-          <section className="nz-card nz-card--glass-accent accidentes-summary-card">
-            <SectionHeading
-              eyebrow="Lo importante"
-              title="Como leer este visualizador"
-              description="La pagina mezcla capas curadas y un explorador completo para no perder detalle."
-            />
-
-            <div className="accidentes-insight-grid">
-              <article className="nz-feature nz-feature--accent">
-                <div className="nz-feature__icon">01</div>
-                <h3 className="nz-feature__title">Mapa provincial</h3>
-                <p className="nz-feature__body">
-                  Coropleta interactiva para comparar volumen, fallecidos, peso urbano y severidad.
-                </p>
-              </article>
-              <article className="nz-feature">
-                <div className="nz-feature__icon">02</div>
-                <h3 className="nz-feature__title">Ritmo temporal</h3>
-                <p className="nz-feature__body">
-                  Meses, dias y horas muestran cuando sube la siniestralidad y como cambia por entorno.
-                </p>
-              </article>
-              <article className="nz-feature">
-                <div className="nz-feature__icon">03</div>
-                <h3 className="nz-feature__title">Perfil de victimas</h3>
-                <p className="nz-feature__body">
-                  Edad, sexo y medio de desplazamiento para ver a quien golpea mas el sistema vial.
-                </p>
-              </article>
-              <article className="nz-feature nz-feature--accent">
-                <div className="nz-feature__icon">04</div>
-                <h3 className="nz-feature__title">Tablas completas</h3>
-                <p className="nz-feature__body">
-                  Las 40 hojas originales quedan reindexadas para navegar el dataset sin volver al Excel.
-                </p>
-              </article>
-            </div>
-          </section>
         </div>
 
         <section id="mapa" className="accidentes-section">
@@ -750,7 +665,7 @@ function App() {
                   <h3 className="nz-card__title">Dias con mayor carga</h3>
                 </div>
               </div>
-              <WeekdayBars rows={dashboard.trends.weekdays} metricKey={trendMetric} />
+               <WeekdayBars rows={weekdayRows} metricKey={trendMetric} />
             </section>
           </div>
 
@@ -759,7 +674,7 @@ function App() {
               <SectionHeading
                 eyebrow="Matriz horaria"
                 title="Dia y hora"
-                description="La heatmap deja ver los tramos donde la intensidad sube con claridad."
+                description="Vista compacta para detectar rapidamente franjas de mayor intensidad."
                 actions={
                   <ToggleGroup
                     options={[
@@ -935,7 +850,7 @@ function App() {
           <SectionHeading
             eyebrow="Capa de riesgo"
             title="Tipologias, infracciones y territorios dominantes"
-            description="La mezcla de accidente, comportamiento e intensidad territorial ayuda a leer donde pesa mas cada patron."
+            description="Dos lecturas directas: que tipos de accidente pesan mas y que infracciones aparecen con mas frecuencia."
           />
 
           <div className="nz-grid nz-grid--2 accidentes-risk-grid">
@@ -975,46 +890,6 @@ function App() {
             </section>
           </div>
 
-          <section className="nz-card nz-card--glass accidentes-communities-card">
-            <SectionHeading
-              eyebrow="Comunidades"
-              title="Tablero de comunidades autonomas"
-              description="Las ocho regiones con mayor volumen concentran gran parte del panorama anual."
-            />
-
-            <div className="accidentes-community-board">
-              {dashboard.overview.topCommunitiesByAccidents.map((community) => (
-                <article key={community.slug} className="nz-card nz-card--glass accidentes-community-card">
-                  <div className="nz-card__header">
-                    <div>
-                      <h3 className="nz-card__title accidentes-community-card__title">{community.name}</h3>
-                      <p className="nz-card__meta">
-                        {formatNumber(community.total.accidents)} accidentes ·{' '}
-                        {formatNumber(community.total.fatalities)} fallecidos
-                      </p>
-                    </div>
-                    <span className="nz-badge nz-badge--glass-brand nz-badge--no-dot">
-                      {formatPercent(percentage(community.urban.accidents, community.total.accidents), 0)} urbano
-                    </span>
-                  </div>
-
-                  <div className="accidentes-community-card__meters">
-                    <MetricSplit
-                      label="Interurbano"
-                      value={formatNumber(community.interurban.accidents)}
-                      share={percentage(community.interurban.accidents, community.total.accidents)}
-                      accent
-                    />
-                    <MetricSplit
-                      label="Urbano"
-                      value={formatNumber(community.urban.accidents)}
-                      share={percentage(community.urban.accidents, community.total.accidents)}
-                    />
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
         </section>
 
         <section id="tablas" className="accidentes-section">
@@ -1122,7 +997,7 @@ function App() {
 
 function LoadingState({ error }) {
   return (
-    <div className="nz accidentes-loading" data-nz-theme="dark" data-nz-skin="aurora">
+    <div className="nz accidentes-loading" data-nz-theme="light" data-nz-skin="aurora">
       <div className="nz-card nz-card--glass-brand accidentes-loading__card">
         <span className="nz-badge nz-badge--glass-brand nz-badge--no-dot">
           {error ? 'Error de carga' : 'Cargando dashboard'}
@@ -1425,14 +1300,16 @@ function WeekdayBars({ rows, metricKey }) {
     <div className="accidentes-weekday-bars">
       {rows.map((row) => (
         <div key={row.slug} className="accidentes-weekday-bars__item">
-          <div className="accidentes-weekday-bars__bar-wrap">
-            <div
-              className="accidentes-weekday-bars__bar"
-              style={{ height: `${(metric.getValue(row.total) / max) * 100}%` }}
-            ></div>
+          <div className="accidentes-weekday-bars__head">
+            <strong>{row.weekday}</strong>
+            <span>{metric.format(metric.getValue(row.total))}</span>
           </div>
-          <strong>{row.weekday.slice(0, 3)}</strong>
-          <span>{metric.format(metric.getValue(row.total))}</span>
+          <div className="nz-progress nz-progress--aurora nz-progress--sm">
+            <span
+              className="nz-progress__bar"
+              style={{ width: `${(metric.getValue(row.total) / max) * 100}%` }}
+            ></span>
+          </div>
         </div>
       ))}
     </div>
@@ -1442,13 +1319,22 @@ function WeekdayBars({ rows, metricKey }) {
 function HourlyHeatmap({ rows }) {
   const weekdayKeys = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo']
   const max = Math.max(...rows.flatMap((row) => weekdayKeys.map((key) => row[key])))
+  const dayLabels = {
+    lunes: 'L',
+    martes: 'M',
+    miercoles: 'X',
+    jueves: 'J',
+    viernes: 'V',
+    sabado: 'S',
+    domingo: 'D',
+  }
 
   return (
     <div className="accidentes-heatmap">
       <div className="accidentes-heatmap__header">
         <span></span>
         {weekdayKeys.map((day) => (
-          <strong key={day}>{day.slice(0, 3)}</strong>
+          <strong key={day}>{dayLabels[day]}</strong>
         ))}
       </div>
 
@@ -1490,18 +1376,28 @@ function AgeDistributionChart({ rows }) {
               <span>{formatNumber(row.total.totalVictims)} victimas</span>
             </div>
 
-            <div className="accidentes-age-chart__track">
+            <div className="accidentes-age-chart__track accidentes-age-chart__track--stacked">
               <span
                 className="accidentes-age-chart__segment accidentes-age-chart__segment--male"
-                style={{ width: `${(row.male.totalVictims / max) * 100}%` }}
+                style={{ width: `${(row.male.totalVictims / row.total.totalVictims) * 100}%` }}
+                title={`Hombre: ${formatNumber(row.male.totalVictims)}`}
               ></span>
               <span
                 className="accidentes-age-chart__segment accidentes-age-chart__segment--female"
-                style={{ width: `${(row.female.totalVictims / max) * 100}%` }}
+                style={{ width: `${(row.female.totalVictims / row.total.totalVictims) * 100}%` }}
+                title={`Mujer: ${formatNumber(row.female.totalVictims)}`}
               ></span>
               <span
                 className="accidentes-age-chart__segment accidentes-age-chart__segment--unknown"
-                style={{ width: `${(row.unknown.totalVictims / max) * 100}%` }}
+                style={{ width: `${(row.unknown.totalVictims / row.total.totalVictims) * 100}%` }}
+                title={`Sin dato: ${formatNumber(row.unknown.totalVictims)}`}
+              ></span>
+            </div>
+
+            <div className="accidentes-age-chart__scale">
+              <span
+                className="accidentes-age-chart__scale-bar"
+                style={{ width: `${(row.total.totalVictims / max) * 100}%` }}
               ></span>
             </div>
           </div>

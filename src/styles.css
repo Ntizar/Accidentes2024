@@ -21,19 +21,9 @@ body {
 .accidentes-sidebar {
   position: sticky;
   top: 0;
-  overflow: hidden;
-}
-
-.accidentes-sidebar::after {
-  content: '';
-  position: absolute;
-  inset: auto -5rem -8rem auto;
-  width: 16rem;
-  height: 16rem;
-  border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--nz-color-accent) 28%, transparent), transparent 65%);
-  filter: blur(18px);
-  pointer-events: none;
+  overflow: auto;
+  background: color-mix(in srgb, var(--nz-surface-raised) 96%, white);
+  border-right: 1px solid color-mix(in srgb, var(--nz-color-brand) 12%, var(--nz-border-soft));
 }
 
 .accidentes-brand {
@@ -56,7 +46,8 @@ body {
 
 .accidentes-brand__copy {
   margin: 0.35rem 0 0;
-  max-width: 24ch;
+  max-width: 30ch;
+  line-height: 1.45;
 }
 
 .accidentes-sidebar__meta {
@@ -77,6 +68,7 @@ body {
 
 .accidentes-header {
   padding-block: 1rem;
+  background: color-mix(in srgb, var(--nz-surface-raised) 96%, white);
 }
 
 .accidentes-header__sub {
@@ -122,7 +114,7 @@ body {
   padding: 0.35rem;
   border: 1px solid var(--nz-border-soft);
   border-radius: var(--nz-radius-pill);
-  background: var(--nz-surface-glass);
+  background: color-mix(in srgb, var(--nz-surface-base) 96%, white);
   box-shadow: var(--nz-shadow-sm);
 }
 
@@ -148,16 +140,15 @@ body {
 }
 
 .accidentes-toggle-group__item.is-active {
-  background: var(--nz-gradient-aurora);
+  background: var(--nz-gradient-brand);
   color: var(--nz-text-on-brand);
-  box-shadow: var(--nz-shadow-aurora);
+  box-shadow: var(--nz-shadow-brand);
 }
 
 .accidentes-hero {
-  border-radius: calc(var(--nz-radius-xl) * 1.15);
-  padding: clamp(2rem, 4vw, 3rem);
-  border: 1px solid var(--nz-border-default);
-  box-shadow: var(--nz-shadow-lg);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border: 1px solid color-mix(in srgb, var(--nz-color-brand) 14%, var(--nz-border-soft));
+  box-shadow: var(--nz-shadow-sm);
 }
 
 .accidentes-hero__inner {
@@ -170,96 +161,100 @@ body {
   max-width: 42rem;
 }
 
-.accidentes-hero__visual {
-  min-height: 30rem;
-}
-
-.accidentes-hero__visual-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.72fr);
-  gap: 1.25rem;
-  align-items: stretch;
-}
-
-.accidentes-hero__orb-zone {
-  position: relative;
-  min-height: 18rem;
-  border-radius: calc(var(--nz-radius-xl) * 0.9);
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--nz-color-brand) 35%, transparent), transparent 36%),
-    radial-gradient(circle at 80% 28%, color-mix(in srgb, var(--nz-color-accent) 35%, transparent), transparent 38%),
-    linear-gradient(145deg, color-mix(in srgb, var(--nz-surface-glass-strong) 92%, transparent), color-mix(in srgb, var(--nz-surface-base) 88%, transparent));
-  border: 1px solid var(--nz-border-default);
-}
-
-.accidentes-hero__ring {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.62;
-}
-
-.accidentes-hero__orb {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  transform: translate(-50%, -52%);
-  box-shadow:
-    inset -10px -18px 38px rgba(0, 0, 0, 0.28),
-    inset 12px 10px 28px rgba(255, 255, 255, 0.12),
-    0 36px 68px rgba(15, 23, 42, 0.45);
-}
-
-.accidentes-hero__stat {
-  position: absolute;
-  left: 1rem;
-  right: 1rem;
-  bottom: 1rem;
+.accidentes-hero__meta {
   display: grid;
   gap: 0.35rem;
-  padding: 1rem;
-  border: 1px solid var(--nz-border-default);
-  border-radius: var(--nz-radius-lg);
-  background: var(--nz-surface-glass-strong);
-  box-shadow: var(--nz-shadow-md);
+  font-size: var(--nz-text-sm);
+  color: var(--nz-text-muted);
 }
 
-.accidentes-hero__stat strong {
-  font-size: clamp(1.35rem, 2vw, 1.7rem);
-}
-
-.accidentes-hero__mini-panel {
-  justify-content: space-between;
-}
-
-.accidentes-mini-kpi {
+.accidentes-hero__summary {
   display: grid;
-  gap: 0.3rem;
+  gap: 1rem;
+  align-self: stretch;
+}
+
+.accidentes-hero__summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.accidentes-hero__summary-stat {
+  display: grid;
+  gap: 0.2rem;
   padding: 1rem;
   border-radius: var(--nz-radius-lg);
-  background: color-mix(in srgb, var(--nz-surface-glass-strong) 88%, transparent);
+  background: color-mix(in srgb, var(--nz-surface-raised) 96%, white);
   border: 1px solid var(--nz-border-soft);
 }
 
-.accidentes-mini-kpi span,
-.accidentes-mini-label {
+.accidentes-hero__summary-stat span {
+  color: var(--nz-text-muted);
   font-size: var(--nz-text-xs);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--nz-text-muted);
   font-weight: 700;
 }
 
-.accidentes-mini-kpi strong {
-  font-size: 1.4rem;
+.accidentes-hero__summary-stat strong {
+  font-size: clamp(1.15rem, 1.6vw, 1.5rem);
 }
 
-.accidentes-mini-kpi small {
+.accidentes-hero__top {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--nz-radius-lg);
+  background: color-mix(in srgb, var(--nz-surface-raised) 96%, white);
+  border: 1px solid var(--nz-border-soft);
+}
+
+.accidentes-hero__top-head,
+.accidentes-hero__top-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.accidentes-hero__top-head {
   color: var(--nz-text-muted);
+  font-size: var(--nz-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.accidentes-hero__top-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.accidentes-hero__top-item {
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--nz-radius-md);
+  background: var(--nz-surface-soft);
+}
+
+.accidentes-hero__top-rank {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--nz-surface-brand-soft);
+  color: var(--nz-status-info-text);
+  font-size: var(--nz-text-sm);
+  font-weight: 700;
+}
+
+.accidentes-hero__top-name {
+  font-weight: 700;
 }
 
 .accidentes-kpis {
-  margin-top: -0.25rem;
+  margin-top: 0;
 }
 
 .accidentes-overview-grid,
@@ -354,9 +349,7 @@ body {
   width: 100%;
   height: 100%;
   display: block;
-  background:
-    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--nz-color-brand) 8%, transparent), transparent 56%),
-    linear-gradient(180deg, color-mix(in srgb, var(--nz-surface-base) 92%, transparent), color-mix(in srgb, var(--nz-surface-page) 88%, transparent));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--nz-surface-base) 98%, white), color-mix(in srgb, var(--nz-surface-page) 94%, white));
 }
 
 .accidentes-map__shape {
@@ -382,7 +375,7 @@ body {
 .accidentes-map__shape.is-selected {
   stroke: rgba(255, 255, 255, 0.96);
   stroke-width: 2;
-  filter: drop-shadow(0 0 16px rgba(34, 211, 238, 0.35));
+  filter: drop-shadow(0 0 12px rgba(37, 99, 235, 0.22));
 }
 
 .accidentes-map__overlay {
@@ -577,56 +570,41 @@ body {
 }
 
 .accidentes-weekday-bars {
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  align-items: end;
-  gap: 0.85rem;
-  min-height: 20rem;
+  align-items: start;
+  gap: 0.75rem;
 }
 
 .accidentes-weekday-bars__item {
   display: grid;
-  gap: 0.55rem;
-  justify-items: center;
+  gap: 0.45rem;
 }
 
-.accidentes-weekday-bars__bar-wrap {
-  width: 100%;
-  height: 15rem;
-  border-radius: var(--nz-radius-lg);
-  border: 1px solid var(--nz-border-soft);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--nz-surface-soft) 70%, transparent), transparent 100%);
+.accidentes-weekday-bars__head {
   display: flex;
-  align-items: flex-end;
-  padding: 0.45rem;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: baseline;
 }
 
-.accidentes-weekday-bars__bar {
-  width: 100%;
-  border-radius: calc(var(--nz-radius-lg) - 0.35rem);
-  background: var(--nz-gradient-aurora);
-  box-shadow: var(--nz-shadow-aurora);
-}
-
-.accidentes-weekday-bars__item strong {
+.accidentes-weekday-bars__head strong {
   font-size: var(--nz-text-sm);
 }
 
-.accidentes-weekday-bars__item span {
+.accidentes-weekday-bars__head span {
   color: var(--nz-text-muted);
   font-size: var(--nz-text-xs);
-  text-align: center;
 }
 
 .accidentes-heatmap {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.28rem;
 }
 
 .accidentes-heatmap__header,
 .accidentes-heatmap__row {
   display: grid;
-  grid-template-columns: 4.5rem repeat(7, minmax(0, 1fr));
-  gap: 0.35rem;
+  grid-template-columns: 3.6rem repeat(7, minmax(0, 1fr));
+  gap: 0.18rem;
   align-items: center;
 }
 
@@ -647,9 +625,8 @@ body {
   display: block;
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 0.7rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  border-radius: 0.32rem;
+  border: 1px solid rgba(37, 99, 235, 0.08);
 }
 
 .accidentes-mode-grid,
@@ -730,14 +707,17 @@ body {
 }
 
 .accidentes-age-chart__rows {
-  max-height: 38rem;
-  overflow: auto;
-  padding-right: 0.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
 }
 
 .accidentes-age-chart__row {
   display: grid;
   gap: 0.45rem;
+  padding: 0.8rem;
+  border-radius: var(--nz-radius-md);
+  background: color-mix(in srgb, var(--nz-surface-base) 94%, white);
+  border: 1px solid var(--nz-border-soft);
 }
 
 .accidentes-age-chart__track,
@@ -750,6 +730,27 @@ body {
 .accidentes-age-chart__segment,
 .accidentes-horizontal-list__bar {
   min-width: 0.35rem;
+}
+
+.accidentes-age-chart__track--stacked {
+  height: 0.62rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--nz-surface-soft) 82%, white);
+}
+
+.accidentes-age-chart__scale {
+  height: 0.34rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nz-surface-soft) 82%, white);
+  overflow: hidden;
+}
+
+.accidentes-age-chart__scale-bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--nz-gradient-brand);
 }
 
 .accidentes-horizontal-list__row {
@@ -844,8 +845,12 @@ body {
 
 @media (max-width: 1180px) {
   .accidentes-map-grid,
-  .accidentes-hero__visual-grid,
   .accidentes-table-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .accidentes-hero__summary-grid,
+  .accidentes-age-chart__rows {
     grid-template-columns: 1fr;
   }
 
@@ -885,9 +890,7 @@ body {
   }
 
   .accidentes-weekday-bars {
-    grid-template-columns: repeat(7, minmax(2.6rem, 1fr));
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
+    gap: 0.55rem;
   }
 
   .accidentes-heatmap {
@@ -896,7 +899,7 @@ body {
 
   .accidentes-heatmap__header,
   .accidentes-heatmap__row {
-    min-width: 34rem;
+    min-width: 24rem;
   }
 
   .accidentes-header {
@@ -922,6 +925,12 @@ body {
     display: none;
   }
 
+  .accidentes-hero__top-head,
+  .accidentes-hero__top-item,
+  .accidentes-weekday-bars__head {
+    grid-template-columns: 1fr;
+  }
+
   .accidentes-map__legend {
     left: 0.75rem;
     right: 0.75rem;
@@ -940,6 +949,6 @@ body {
 
   .accidentes-heatmap__header,
   .accidentes-heatmap__row {
-    min-width: 30rem;
+    min-width: 22rem;
   }
 }
